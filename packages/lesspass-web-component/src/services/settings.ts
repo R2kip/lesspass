@@ -1,7 +1,41 @@
-import { defaultPasswordProfile } from "lesspass";
+import { defaultPasswordProfile, PasswordProfile } from "lesspass";
 import { SettingsState } from "../settings/settingsSlice";
-import { LESSPASS_SETTINGS } from "./constant";
+import { LESSPASS_SETTINGS, LESSPASS_SITE_PROFILES } from "./constant";
 import { cleanSite } from "./site";
+
+export type SiteProfile = Omit<PasswordProfile, "site">;
+
+function getAllSiteProfiles(): Record<string, SiteProfile> {
+  try {
+    const data = window.localStorage.getItem(LESSPASS_SITE_PROFILES);
+    return data ? JSON.parse(data) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveSiteProfile(site: string, profile: SiteProfile) {
+  if (!site) return;
+  try {
+    const profiles = getAllSiteProfiles();
+    window.localStorage.setItem(
+      LESSPASS_SITE_PROFILES,
+      JSON.stringify({ ...profiles, [site]: profile }),
+    );
+  } catch (error) {
+    console.error(`Error saving site profile:`, error);
+  }
+}
+
+export function getSiteProfile(site: string): SiteProfile | null {
+  if (!site) return null;
+  try {
+    const profiles = getAllSiteProfiles();
+    return profiles[site] ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export function saveSettings(settings: SettingsState) {
   try {

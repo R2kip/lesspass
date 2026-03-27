@@ -7,8 +7,6 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
-import { server } from "./setupTests";
-import { http, HttpResponse } from "msw";
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
   route?: string;
@@ -23,12 +21,6 @@ export function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ): any {
-  server.use(
-    http.get(
-      "https://api.lesspass.com/auth/users/me/",
-      () => new HttpResponse(null, { status: 401 }),
-    ),
-  );
   function Wrapper({ children }: { children: ReactNode }): ReactNode {
     return (
       <MemoryRouter initialEntries={[route]}>

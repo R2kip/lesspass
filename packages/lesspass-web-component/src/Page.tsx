@@ -1,16 +1,8 @@
 import { Outlet } from "react-router";
 import Alerts from "./alerts/Alerts";
 import Header from "./components/Header";
-import { useGetCurrentUserQuery } from "./auth/authApi";
-import { LoadingPage } from "./LoadingPage";
 
 export default function Page() {
-  const { isLoading } = useGetCurrentUserQuery();
-
-  if (isLoading) {
-    return <LoadingPage />;
-  }
-
   return (
     <div>
       <Alerts />

@@ -1,16 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { authReducer } from "./auth/authSlice";
 import { api } from "./api";
 import alertsReducer from "./alerts/alertsSlice";
-import authMiddleware from "./auth/authMiddleware";
 import settingsReducer from "./settings/settingsSlice";
 import settingsMiddleware from "./settings/settingsMiddleware";
 
 export const rootReducer = combineReducers({
   alerts: alertsReducer,
   [api.reducerPath]: api.reducer,
-  auth: authReducer,
   settings: settingsReducer,
 });
 
@@ -21,7 +18,6 @@ export function setupStore(preloadedState?: Partial<RootState>) {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .concat(api.middleware)
-        .prepend(authMiddleware.middleware)
         .prepend(settingsMiddleware.middleware),
   });
 }

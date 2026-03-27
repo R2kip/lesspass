@@ -9,6 +9,7 @@ import {
 } from "lesspass";
 import { ReactNode, useEffect, useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { getSiteProfile, saveSiteProfile } from "../services/settings";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Input } from "../components/input";
@@ -128,11 +129,26 @@ export default function PasswordProfile({
     methods.reset(passwordProfile);
   }, [passwordProfile]);
 
+  const siteValue = methods.watch("site");
+  useEffect(() => {
+    if (!siteValue) return;
+    const siteProfile = getSiteProfile(siteValue);
+    if (siteProfile) {
+      (
+        ["login", "lowercase", "uppercase", "digits", "symbols", "length", "counter"] as const
+      ).forEach((field) => {
+        methods.setValue(field, siteProfile[field], { shouldDirty: true });
+      });
+    }
+  }, [siteValue]);
+
   return (
     <FormProvider {...methods}>
       <PasswordProfileForm
         focus={focus}
         onSubmit={(passwordProfile, masterPassword) => {
+          const { site, ...profile } = passwordProfile;
+          saveSiteProfile(site, profile);
           generatePassword(passwordProfile, masterPassword).then(
             (generatedPassword) => {
               setGeneratedPassword(generatedPassword);
