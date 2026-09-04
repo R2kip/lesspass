@@ -64,9 +64,9 @@
     "globals": "^16.5.0",
     "jsdom": "^27.4.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.69.0",
-    "vite": "^8.1.4",
+    "vite": "^8.2.2",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.1.11"
   }
